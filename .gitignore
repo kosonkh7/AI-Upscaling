@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+.Python
+build/
+develop-eggs/
+dist/
+egg-info/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+.env/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# PyTorch / Deep Learning
+*.pth
+*.pt
+*.bin
+*.onnx
+runs/
+logs/
+checkpoints/
+
+# Project Specific
+# Temporary output image from test script
+upscaled_test_image.png
+
+# Ignore the entire HAT and Real-ESRGAN original folders
+# as their necessary components have been integrated into backend/
+HAT/
+Real-ESRGAN/
+
+memo.txt
