@@ -14,6 +14,10 @@
     --button-border-radius: 8px;
 }
 
+html {
+    font-size: 16px; /* Base font size for rem units */
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     background-color: var(--background-color);
@@ -23,27 +27,27 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
+    padding: 1.25rem; /* 20px */
     box-sizing: border-box;
 }
 
 .container {
     background-color: var(--card-background);
-    padding: 40px;
+    padding: 2.5rem; /* 40px */
     border-radius: var(--border-radius);
-    box-shadow: 0 8px 24px var(--shadow-light);
+    box-shadow: 0 0.5rem 1.5rem var(--shadow-light);
     text-align: center;
     width: 100%;
-    max-width: 900px;
+    max-width: 56.25rem; /* 900px */
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 1.875rem; /* 30px */
 }
 
 header h1 {
     font-size: 2.5rem;
     color: var(--primary-color);
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem; /* 10px */
 }
 
 .model-name {
@@ -55,7 +59,7 @@ header h1 {
 .subtitle {
     font-size: 1.1rem;
     color: var(--light-text-color);
-    margin-bottom: 30px;
+    margin-bottom: 1.875rem; /* 30px */
 }
 
 /* Upload Section */
@@ -63,15 +67,15 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 1.25rem; /* 20px */
 }
 
 .drop-area {
-    border: 2px dashed var(--primary-color);
+    border: 0.125rem dashed var(--primary-color);
     border-radius: var(--border-radius);
-    padding: 40px 20px;
+    padding: 2.5rem 1.25rem; /* 40px 20px */
     width: 100%;
-    max-width: 500px;
+    max-width: 31.25rem; /* 500px */
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
@@ -82,19 +86,19 @@ header h1 {
 }
 
 .drop-area p {
-    margin: 0 0 15px 0;
+    margin: 0 0 0.9375rem 0; /* 15px */
     color: var(--light-text-color);
 }
 
 .upload-button {
     background-color: var(--primary-color);
     color: #fff;
-    padding: 12px 25px;
+    padding: 0.75rem 1.5625rem; /* 12px 25px */
     border-radius: var(--button-border-radius);
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s ease;
-    display: inline-block; /* For label to act as button */
+    display: inline-block;
 }
 
 .upload-button:hover {
@@ -102,7 +106,7 @@ header h1 {
 }
 
 .file-info {
-    margin-top: 15px;
+    margin-top: 0.9375rem; /* 15px */
     font-size: 0.95rem;
     color: var(--text-color);
     font-weight: bold;
@@ -111,7 +115,7 @@ header h1 {
 .upscale-button {
     background-color: var(--primary-color);
     color: #fff;
-    padding: 15px 30px;
+    padding: 0.9375rem 1.875rem; /* 15px 30px */
     border-radius: var(--button-border-radius);
     font-size: 1.1rem;
     font-weight: bold;
@@ -135,15 +139,15 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 1.25rem; /* 20px */
 }
 
 .loading-spinner {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid var(--primary-color);
+    border: 0.375rem solid #f3f3f3; /* 6px */
+    border-top: 0.375rem solid var(--primary-color);
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 3.125rem; /* 50px */
+    height: 3.125rem; /* 50px */
     animation: spin 1s linear infinite;
 }
 
@@ -157,46 +161,105 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 1.875rem; /* 30px */
 }
 
-.image-display-area {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
+/* Image Comparison Slider */
+.image-comparison-slider {
+    position: relative;
     width: 100%;
-}
-
-.image-wrapper {
-    border: 1px solid var(--border-color);
+    max-width: 50rem; /* 800px */
+    height: auto; /* Will be set by JS based on image aspect ratio */
+    overflow: hidden;
     border-radius: var(--border-radius);
-    padding: 15px;
+    box-shadow: 0 0.25rem 0.75rem var(--shadow-light);
+    cursor: ew-resize;
+}
+
+.image-container {
+    position: absolute;
     width: 100%;
-    max-width: 400px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.image-container img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Prevent image dragging */
+}
+
+.original-image-container {
+    width: 100%;
+}
+
+.upscaled-image-container {
+    width: 50%; /* Initial split */
+}
+
+.image-label {
+    position: absolute;
+    bottom: 0.625rem; /* 10px */
+    padding: 0.3125rem 0.625rem; /* 5px 10px */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 0.875rem; /* 14px */
+    border-radius: 0.25rem; /* 4px */
+}
+
+.original-image-container .image-label {
+    left: 0.625rem; /* 10px */
+}
+
+.upscaled-image-container .image-label {
+    right: 0.625rem; /* 10px */
+}
+
+.slider-handle {
+    position: absolute;
+    top: 0;
+    left: 50%; /* Initial position */
+    width: 0.25rem; /* 4px */
+    height: 100%;
+    background-color: #fff;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 12px var(--shadow-light);
+    z-index: 10;
 }
 
-.image-wrapper h2 {
-    font-size: 1.5rem;
-    color: var(--text-color);
-    margin-bottom: 15px;
+.slider-bar {
+    width: 0.25rem; /* 4px */
+    height: 100%;
+    background-color: #fff;
 }
 
-.image-wrapper img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px var(--shadow-light);
+.slider-arrow {
+    width: 0;
+    height: 0;
+    border-left: 0.625rem solid transparent; /* 10px */
+    border-right: 0.625rem solid transparent; /* 10px */
+    border-bottom: 0.625rem solid #fff; /* 10px */
+}
+
+.slider-arrow.left {
+    transform: rotate(-90deg);
+    margin-bottom: 0.625rem; /* 10px */
+}
+
+.slider-arrow.right {
+    transform: rotate(90deg);
+    margin-top: 0.625rem; /* 10px */
 }
 
 .download-button {
     background-color: var(--secondary-color);
     color: #fff;
-    padding: 12px 25px;
+    padding: 0.75rem 1.5625rem; /* 12px 25px */
     border-radius: var(--button-border-radius);
     text-decoration: none;
     font-size: 1rem;
@@ -211,7 +274,7 @@ header h1 {
 .reset-button {
     background-color: #6c757d;
     color: #fff;
-    padding: 12px 25px;
+    padding: 0.75rem 1.5625rem; /* 12px 25px */
     border-radius: var(--button-border-radius);
     font-size: 1rem;
     border: none;
@@ -228,8 +291,8 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    color: #dc3545; /* Red for errors */
+    gap: 1.25rem; /* 20px */
+    color: #dc3545;
 }
 
 .error-message {
@@ -239,9 +302,13 @@ header h1 {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    html {
+        font-size: 15px; /* Adjust base font size for medium screens */
+    }
+
     .container {
-        padding: 25px;
-        gap: 20px;
+        padding: 1.5rem; /* 24px */
+        gap: 1.25rem; /* 20px */
     }
 
     header h1 {
@@ -256,20 +323,24 @@ header h1 {
         font-size: 1rem;
     }
 
-    .image-display-area {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
+    .image-comparison-slider {
+        max-width: 100%;
     }
 
-    .image-wrapper {
-        max-width: 100%;
+    .download-button, .reset-button {
+        width: 100%;
+        box-sizing: border-box;
     }
 }
 
 @media (max-width: 480px) {
+    html {
+        font-size: 14px; /* Adjust base font size for small screens */
+    }
+
     .container {
-        padding: 15px;
+        padding: 1rem; /* 16px */
+        gap: 1rem; /* 16px */
     }
 
     header h1 {
@@ -281,11 +352,11 @@ header h1 {
     }
 
     .upload-button, .upscale-button, .download-button, .reset-button {
-        padding: 10px 20px;
+        padding: 0.625rem 1.25rem; /* 10px 20px */
         font-size: 0.9rem;
     }
 
     .drop-area {
-        padding: 30px 15px;
+        padding: 1.5rem 0.75rem; /* 24px 12px */
     }
 }

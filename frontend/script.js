@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // UI 요소 가져오기
     const uploadSection = document.getElementById('upload-section');
     const dropArea = document.getElementById('drop-area');
     const imageUpload = document.getElementById('image-upload');
@@ -18,7 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessage = document.getElementById('error-message');
     const errorResetButton = document.getElementById('error-reset-button');
 
-    let selectedFile = null; // 선택된 파일 저장
+    // Slider elements
+    const imageComparisonSlider = document.getElementById('image-comparison-slider');
+    const upscaledImageContainer = document.querySelector('.upscaled-image-container');
+    const sliderHandle = document.getElementById('slider-handle');
+
+    let selectedFile = null;
+    let isDragging = false;
 
     // --- UI 상태 관리 함수 ---
     function showSection(section) {
@@ -26,17 +31,27 @@ document.addEventListener('DOMContentLoaded', () => {
         processingSection.style.display = 'none';
         resultSection.style.display = 'none';
         errorSection.style.display = 'none';
-        section.style.display = 'flex'; // flex로 설정하여 중앙 정렬 유지
+        section.style.display = 'flex';
     }
 
     function resetUI() {
+        if (upscaledImage.src && upscaledImage.src.startsWith('blob:')) {
+            URL.revokeObjectURL(upscaledImage.src);
+        }
+
         selectedFile = null;
-        imageUpload.value = ''; // 파일 입력 초기화
+        imageUpload.value = '';
         fileInfo.textContent = '';
         upscaleButton.disabled = true;
         originalImage.src = '';
         upscaledImage.src = '';
         downloadLink.href = '';
+
+        // Reset slider position
+        upscaledImageContainer.style.width = '50%';
+        sliderHandle.style.left = '50%';
+        imageComparisonSlider.style.height = 'auto'; // Reset height
+
         showSection(uploadSection);
     }
 
@@ -86,10 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInfo.textContent = `선택된 파일: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
         upscaleButton.disabled = false;
 
-        // 원본 이미지 미리보기
         const reader = new FileReader();
         reader.onload = (e) => {
             originalImage.src = e.target.result;
+            // Set slider height based on original image aspect ratio
+            originalImage.onload = () => {
+                const aspectRatio = originalImage.naturalHeight / originalImage.naturalWidth;
+                imageComparisonSlider.style.height = `${imageComparisonSlider.offsetWidth * aspectRatio}px`;
+            };
         };
         reader.readAsDataURL(file);
     }
@@ -101,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        upscaleButton.disabled = true;
         showSection(processingSection);
 
         const formData = new FormData();
@@ -113,41 +133,71 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
-                // 백엔드에서 JSON 에러 응답을 보낼 경우를 대비
                 const errorText = await response.text();
                 let errorDetail = '알 수 없는 오류가 발생했습니다.';
                 try {
                     const errorJson = JSON.parse(errorText);
-                    errorDetail = errorJson.detail || errorDetail;
+                    errorDetail = errorJson.detail || errorJson.detail[0].msg || errorDetail;
                 } catch (e) {
                     errorDetail = errorText || errorDetail;
                 }
                 throw new Error(`업스케일링 실패: ${errorDetail}`);
             }
 
-            // 응답이 이미지 Blob이므로 직접 Blob으로 받음
             const imageBlob = await response.blob();
-
-            // Blob을 URL로 변환하여 이미지 표시
             const upscaledImageUrl = URL.createObjectURL(imageBlob);
             upscaledImage.src = upscaledImageUrl;
 
-            // 다운로드 링크 설정
             downloadLink.href = upscaledImageUrl;
-            downloadLink.download = `upscaled_${selectedFile.name}`; // 다운로드 파일명 설정
+            downloadLink.download = `upscaled_${selectedFile.name}`;
 
-            // 이미지 로딩 완료 후 결과 섹션 표시
-            upscaledImage.onload = () => {
-                showSection(resultSection);
-            };
-            upscaledImage.onerror = () => {
-                showError('업스케일된 이미지 로딩에 실패했습니다.');
-                URL.revokeObjectURL(upscaledImageUrl); // 에러 발생 시 URL 해제
-            };
+            await new Promise((resolve, reject) => {
+                upscaledImage.onload = resolve;
+                upscaledImage.onerror = reject;
+            });
+
+            showSection(resultSection);
 
         } catch (error) {
             console.error('Error:', error);
             showError(`오류가 발생했습니다: ${error.message}`);
+        } finally {
+            // No explicit re-enable needed here.
+        }
+    });
+
+    // Slider functionality
+    sliderHandle.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        imageComparisonSlider.classList.add('active');
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        imageComparisonSlider.classList.remove('active');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const sliderRect = imageComparisonSlider.getBoundingClientRect();
+        let x = e.clientX - sliderRect.left;
+
+        // Clamp x within slider bounds
+        if (x < 0) x = 0;
+        if (x > sliderRect.width) x = sliderRect.width;
+
+        const percentage = (x / sliderRect.width) * 100;
+
+        upscaledImageContainer.style.width = `${percentage}%`;
+        sliderHandle.style.left = `${percentage}%`;
+    });
+
+    // Handle window resize for slider height
+    window.addEventListener('resize', () => {
+        if (originalImage.naturalWidth && originalImage.naturalHeight) {
+            const aspectRatio = originalImage.naturalHeight / originalImage.naturalWidth;
+            imageComparisonSlider.style.height = `${imageComparisonSlider.offsetWidth * aspectRatio}px`;
         }
     });
 

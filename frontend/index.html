@@ -30,14 +30,19 @@
             </div>
 
             <div class="result-section" id="result-section" style="display: none;">
-                <div class="image-display-area">
-                    <div class="image-wrapper">
-                        <h2>원본 이미지</h2>
+                <div class="image-comparison-slider" id="image-comparison-slider">
+                    <div class="image-container original-image-container">
                         <img id="original-image" src="" alt="Original Image">
+                        <div class="image-label">원본</div>
                     </div>
-                    <div class="image-wrapper">
-                        <h2>업스케일된 이미지</h2>
+                    <div class="image-container upscaled-image-container">
                         <img id="upscaled-image" src="" alt="Upscaled Image">
+                        <div class="image-label">업스케일</div>
+                    </div>
+                    <div class="slider-handle" id="slider-handle">
+                        <div class="slider-arrow left"></div>
+                        <div class="slider-bar"></div>
+                        <div class="slider-arrow right"></div>
                     </div>
                 </div>
                 <a id="download-link" href="" download="upscaled_image.png" class="download-button">업스케일된 이미지 다운로드</a>
