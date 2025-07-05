@@ -9,46 +9,37 @@ This project provides a web-based AI image upscaling service. It leverages state
 -   **High-Quality Upscaling**: Utilizes the Hybrid Attention Transformer (HAT) model for superior image resolution enhancement.
 -   **Web Interface**: User-friendly web frontend for easy image upload and upscaling.
 -   **RESTful API**: FastAPI backend provides a clean and efficient API for integration with other applications.
--   **GPU Acceleration Support**: Configured to leverage NVIDIA GPUs for faster processing (if available and properly set up).
+-   **GPU Acceleration Support**: Configured to leverage NVIDIA GPUs for faster processing.
 
 ## 🛠️ Technologies Used
 
--   **Backend**: Python, FastAPI, Uvicorn, PyTorch, Basicsr, OpenCV, PIL
+-   **Backend**: Python, FastAPI, Uvicorn, PyTorch, BasicSR, GFPGAN, OpenCV, Pillow
 -   **Frontend**: HTML, CSS, JavaScript
 -   **AI Models**: Hybrid Attention Transformer (HAT)
 
-### Hybrid Attention Transformer (HAT) Model
-
-The HAT model is a state-of-the-art image super-resolution model based on the Transformer architecture. It is designed to effectively capture long-range dependencies and fine-grained details in images, leading to superior upscaling quality. This project utilizes a pre-trained HAT model (specifically `HAT_SRx4_ImageNet-pretrain.pth`) which was trained on the ImageNet dataset for 4x upscaling.
-
-## 📚 References
-
-This project was developed by integrating and adapting components from the following open-source projects and research:
-
--   **HAT (Hybrid Attention Transformer)**: Official GitHub repository for the HAT model. ([https://github.com/XPixelGroup/HAT](https://github.com/XPixelGroup/HAT))
--   **BasicSR**: An open-source image and video restoration toolbox based on PyTorch. Many utility functions and base classes are adapted from BasicSR. ([https://github.com/XPixelGroup/BasicSR](https://github.com/XPixelGroup/BasicSR))
--   **Real-ESRGAN**: Practical algorithms for Real-world Image Super-Resolution. The `RealESRGANer` utility class was adapted from this project. ([https://github.com/xinntao/Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN))
-
 ## 📂 Project Structure
+
+The project is organized into a separate frontend and backend.
 
 ```
 AI-Upscaling/
 ├── backend/                  # FastAPI backend application
 │   ├── app/                  # Core application logic
 │   │   ├── api/              # API routes
-│   │   ├── services/         # Business logic, including upscaling service
+│   │   ├── services/         # Business logic (upscaling service)
 │   │   ├── config.py         # Application configuration
 │   │   └── main.py           # FastAPI app entry point
-├── models/               # Custom model architectures (e.g., HAT, Real-ESRGAN components)
-├── model_weights/        # Directory for storing pre-trained model weights (.pth files)
-├── requirements.txt      # Python dependencies for the backend
-├── run.py                # Script to run the FastAPI application
+│   ├── models/               # Custom model architectures
+│   ├── model_weights/        # Directory for pre-trained model weights (.pth)
+│   ├── requirements.txt      # Python dependencies
+│   └── run.py                # Script to run the FastAPI application
 ├── frontend/                 # Web frontend files
 │   ├── index.html
 │   ├── script.js
 │   └── style.css
-├── README.md                 # Project README file
-└── venv/                     # Python virtual environment (ignored by Git)
+├── .gitignore
+├── README.md                 # This file
+└── venv/                     # Python virtual environment (ignored)
 ```
 
 ## ⚙️ Setup and Installation
@@ -57,9 +48,9 @@ Follow these steps to get the project up and running on your local machine.
 
 ### Prerequisites
 
--   Python 3.8+ (Recommended: Python 3.10)
+-   Python 3.8+ (Python 3.10+ recommended)
 -   Git
--   (Optional for GPU acceleration) NVIDIA GPU with compatible drivers and CUDA Toolkit installed.
+-   **NVIDIA GPU with CUDA Toolkit 12.x installed**. This project is configured for GPU acceleration and requires a compatible environment.
 
 ### Steps
 
@@ -71,7 +62,10 @@ Follow these steps to get the project up and running on your local machine.
 
 2.  **Create and activate a virtual environment:**
     ```bash
+    # Create a virtual environment
     python -m venv venv
+
+    # Activate it
     # On Windows:
     .\venv\Scripts\activate
     # On macOS/Linux:
@@ -79,81 +73,63 @@ Follow these steps to get the project up and running on your local machine.
     ```
 
 3.  **Install backend dependencies:**
+    The `requirements.txt` file is specifically configured to work with a CUDA 12.x environment and installs some libraries directly from GitHub to ensure compatibility.
     ```bash
     pip install -r backend/requirements.txt
     ```
 
-4.  **(Important for GPU Usage) Install PyTorch with CUDA support:**
-    If you have an NVIDIA GPU and want to utilize it for faster upscaling, you **must** install the correct PyTorch version that supports your CUDA Toolkit.
-    
-    First, uninstall any existing PyTorch installations:
-    ```bash
-    pip uninstall torch torchvision torchaudio
-    ```
-    Then, visit the official PyTorch website ([https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/)) to get the exact installation command for your specific CUDA version (e.g., CUDA 11.8, CUDA 12.1). An example command might look like this:
-    ```bash
-    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-    ```
-    Verify GPU availability:
+4.  **Verify GPU availability:**
+    After installation, run this command to ensure PyTorch can detect your GPU.
     ```python
-    python -c "import torch; print(torch.cuda.is_available())"
+    python -c "import torch; print(f'GPU Available: {torch.cuda.is_available()}')"
     ```
-    This should output `True` if GPU setup is successful.
+    This should output `GPU Available: True`. If not, please check your NVIDIA driver and CUDA Toolkit installation.
 
 5.  **Download and place model weights:**
-    The project uses the `HAT_SRx4_ImageNet-pretrain.pth` model. You need to download its pre-trained weights and place them in the `backend/model_weights/` directory.
-    
+    The project uses the `HAT_SRx4_ImageNet-pretrain.pth` model. Download its pre-trained weights and place them in the `backend/model_weights/` directory.
     -   **Download Link**: [HAT_SRx4_ImageNet-pretrain.pth](https://github.com/XPixelGroup/HAT/releases/download/v0.1.0/HAT_SRx4_ImageNet-pretrain.pth)
-    -   **Placement**: Save the downloaded file as `backend/model_weights/HAT_SRx4_ImageNet-pretrain.pth`.
+    -   **Placement**: Save the downloaded file to `backend/model_weights/HAT_SRx4_ImageNet-pretrain.pth`.
 
 ## 🚀 Usage
 
-### Running the Backend Server
+To run the service, you need to start the backend and frontend servers separately in **two different terminals**.
 
-Navigate to the project root directory (`AI-Upscaling/`) and run:
+### Terminal 1: Run the Backend (API Server)
 
+Navigate to the project root and run the FastAPI application.
 ```bash
 python backend/run.py
 ```
+The backend API will start on `http://127.0.0.1:8000`. You will see logs from the Uvicorn server in this terminal.
 
-The backend API will be available at `http://127.0.0.1:8000`.
+### Terminal 2: Run the Frontend (Web Interface)
 
-### Accessing the Frontend
-
-Open `frontend/index.html` in your web browser. You can upload an image and see the upscaled result.
-
-### API Endpoint
-
--   **Endpoint**: `/upscale`
--   **Method**: `POST`
--   **Content-Type**: `multipart/form-data`
--   **Form Field**: `file` (your image file)
-
-Example using `curl`:
-
+In a new terminal, navigate to the `frontend` directory and start a simple Python web server.
 ```bash
-curl -X POST "http://127.0.0.1:8000/upscale" \
-     -H "accept: application/json" \
-     -H "Content-Type: multipart/form-data" \
-     -F "file=@/path/to/your/image.png;type=image/png" \
-     --output upscaled_image_output.png
+cd frontend
+python -m http.server 3000
 ```
+This will serve the `index.html` file on `http://127.0.0.1:3000`.
 
-## 💡 Future Improvements & Considerations
+### Accessing the Application
 
--   **Model Diversity**: Integrate specialized models for different image types (e.g., faces, illustrations, text) to improve quality across various domains.
--   **Performance Optimization**: Explore ONNX/TensorRT conversion for further speedup, and refine tiling strategies for large images.
--   **User Experience**: Enhance the frontend with features like progress indicators, before/after comparisons, and support for more image formats.
--   **Error Handling**: Implement more robust and user-friendly error messages.
+Once both servers are running, open your web browser and go to:
+> **http://127.0.0.1:3000**
+
+You can now upload an image to be upscaled.
+
+## 🔧 Troubleshooting
+
+-   **`ModuleNotFoundError: No module named 'torchvision.transforms.functional_tensor'`**
+    -   **Cause**: This error occurs because the standard versions of `basicsr` or `gfpgan` from PyPI are not compatible with recent versions of `torchvision`. The `functional_tensor` module was refactored in newer `torchvision` releases.
+    -   **Solution**: This project's `requirements.txt` file resolves this by installing these libraries directly from their official GitHub repositories, which contain the latest compatibility fixes. If you encounter this error, ensure you have correctly installed the dependencies using `pip install -r backend/requirements.txt`.
+
+## 💡 Future Improvements
+
+-   **Model Diversity**: Integrate specialized models for different image types (e.g., faces, illustrations).
+-   **Performance Optimization**: Explore ONNX/TensorRT conversion for further speedup.
+-   **User Experience**: Enhance the frontend with progress indicators and before/after comparisons.
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 📧 Contact
-
-For any questions or feedback, please open an issue on GitHub.
