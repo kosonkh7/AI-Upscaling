@@ -17,6 +17,16 @@ This project provides a web-based AI image upscaling service. It leverages state
 -   **Frontend**: HTML, CSS, JavaScript
 -   **AI Models**: Hybrid Attention Transformer (HAT)
 
+### Hybrid Attention Transformer (HAT) Model
+The HAT model is a state-of-the-art image super-resolution model based on the Transformer architecture. It is designed to effectively capture long-range dependencies and fine-grained details in images, leading to superior upscaling quality. This project utilizes a pre-trained HAT model (specifically HAT_SRx4_ImageNet-pretrain.pth) which was trained on the ImageNet dataset for 4x upscaling.
+
+## 📚 References
+This project was developed by integrating and adapting components from the following open-source projects and research:
+
+- HAT (Hybrid Attention Transformer): Official GitHub repository for the HAT model. (https://github.com/XPixelGroup/HAT)
+- BasicSR: An open-source image and video restoration toolbox based on PyTorch. Many utility functions and base classes are adapted from BasicSR. (https://github.com/XPixelGroup/BasicSR)
+- Real-ESRGAN: Practical algorithms for Real-world Image Super-Resolution. The RealESRGANer utility class was adapted from this project. (https://github.com/xinntao/Real-ESRGAN)
+
 ## 📂 Project Structure
 
 The project is organized into a separate frontend and backend.
@@ -126,7 +136,7 @@ You can now upload an image to be upscaled.
 
 ## 💡 Future Improvements
 
--   **Model Diversity**: Integrate specialized models for different image types (e.g., faces, illustrations).
+-   **Model Diversity**: Integrate specialized models for different image types (e.g., faces, illustrations) to improve quality across various domains.
 -   **Performance Optimization**: Explore ONNX/TensorRT conversion for further speedup.
 -   **User Experience**: Enhance the frontend with progress indicators and before/after comparisons.
 
