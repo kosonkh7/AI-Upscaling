@@ -21,6 +21,13 @@
                     <label for="image-upload" class="upload-button">이미지 선택</label>
                     <p class="file-info" id="file-info"></p>
                 </div>
+                <div class="model-selector">
+                    <label for="model-select">업스케일링 모델:</label>
+                    <select id="model-select">
+                        <option value="HAT_SRx4_ImageNet-pretrain" selected>HAT (ImageNet-pretrain) - 일반</option>
+                        <option value="Real_HAT_GAN_SRx4">Real-HAT (GAN) - 사실적</option>
+                    </select>
+                </div>
                 <button class="upscale-button" id="upscale-button" disabled>업스케일 시작</button>
             </div>
 

@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropArea = document.getElementById('drop-area');
     const imageUpload = document.getElementById('image-upload');
     const fileInfo = document.getElementById('file-info');
+    const modelSelect = document.getElementById('model-select'); // 모델 선택 element
     const upscaleButton = document.getElementById('upscale-button');
 
     const processingSection = document.getElementById('processing-section');
@@ -123,25 +124,25 @@ document.addEventListener('DOMContentLoaded', () => {
         upscaleButton.disabled = true;
         showSection(processingSection);
 
+        const selectedModel = modelSelect.value; // 선택된 모델 값 가져오기
+
         const formData = new FormData();
         formData.append('file', selectedFile);
+        formData.append('model', selectedModel); // FormData에 모델 이름 추가
 
         try {
             const response = await fetch('http://localhost:8000/upscale/', {
                 method: 'POST',
-                body: formData,
+                // headers 객체를 명시하지 않아야 브라우저가 자동으로
+                // Content-Type: multipart/form-data 와 boundary를 설정해줍니다.
+                body: formData, 
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                let errorDetail = '알 수 없는 오류가 발생했습니다.';
-                try {
-                    const errorJson = JSON.parse(errorText);
-                    errorDetail = errorJson.detail || errorJson.detail[0].msg || errorDetail;
-                } catch (e) {
-                    errorDetail = errorText || errorDetail;
-                }
-                throw new Error(`업스케일링 실패: ${errorDetail}`);
+                // 서버로부터 받은 응답 텍스트를 그대로 오류 메시지로 사용합니다.
+                // 이렇게 하면 숨겨진 실제 오류(예: FastAPI의 유효성 검사 오류)를 볼 수 있습니다.
+                const errorText = await response.text(); 
+                throw new Error(`업스케일링 실패 (서버 응답): ${errorText}`);
             }
 
             const imageBlob = await response.blob();

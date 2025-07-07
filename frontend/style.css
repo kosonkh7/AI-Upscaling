@@ -112,6 +112,35 @@ header h1 {
     font-weight: bold;
 }
 
+/* Model Selector */
+.model-selector {
+    margin-top: 1rem; /* 16px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem; /* 10px */
+}
+
+.model-selector label {
+    font-size: 1rem;
+    color: var(--light-text-color);
+}
+
+.model-selector select {
+    padding: 0.5rem 0.75rem; /* 8px 12px */
+    border-radius: var(--button-border-radius);
+    border: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.model-selector select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.1875rem rgba(26, 115, 232, 0.2); /* 3px */
+}
+
 .upscale-button {
     background-color: var(--primary-color);
     color: #fff;
