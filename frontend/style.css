@@ -221,6 +221,7 @@ header h1 {
 }
 
 .original-image-container {
+    /* 이 컨테이너는 슬라이더의 전체 영역을 차지 */
     width: 100%;
 }
 

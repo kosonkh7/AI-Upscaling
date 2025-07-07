@@ -9,14 +9,14 @@
 <body>
     <div class="container">
         <header>
-            <h1>AI 이미지 업스케일러 <span class="model-name">(HAT)</span></h1>
+            <h1>AI 기반 이미지 업스케일링 서비스 <span class="model-name">(HAT)</span></h1>
             <p class="subtitle">고해상도로 변환하고 싶은 이미지를 업로드하세요.</p>
         </header>
 
         <main>
             <div class="upload-section" id="upload-section">
                 <div class="drop-area" id="drop-area">
-                    <p>여기에 이미지를 드래그 앤 드롭하거나</p>
+                    <p>여기에 이미지를 드래그 앤 드롭 해주세요.</p>
                     <input type="file" id="image-upload" accept="image/*" hidden>
                     <label for="image-upload" class="upload-button">이미지 선택</label>
                     <p class="file-info" id="file-info"></p>
@@ -25,10 +25,10 @@
                     <label for="model-select">업스케일링 모델:</label>
                     <select id="model-select">
                         <option value="HAT_SRx4_ImageNet-pretrain" selected>HAT (ImageNet-pretrain) - 일반</option>
-                        <option value="Real_HAT_GAN_SRx4">Real-HAT (GAN) - 사실적</option>
+                        <option value="Real_HAT_GAN_SRx4">Real-HAT(GAN) - 초고해상도</option>
                     </select>
                 </div>
-                <button class="upscale-button" id="upscale-button" disabled>업스케일 시작</button>
+                <button class="upscale-button" id="upscale-button" disabled>업스케일링 시작</button>
             </div>
 
             <div class="processing-section" id="processing-section" style="display: none;">
@@ -44,7 +44,7 @@
                     </div>
                     <div class="image-container upscaled-image-container">
                         <img id="upscaled-image" src="" alt="Upscaled Image">
-                        <div class="image-label">업스케일</div>
+                        <div class="image-label">업스케일링</div>
                     </div>
                     <div class="slider-handle" id="slider-handle">
                         <div class="slider-arrow left"></div>
@@ -52,7 +52,7 @@
                         <div class="slider-arrow right"></div>
                     </div>
                 </div>
-                <a id="download-link" href="" download="upscaled_image.png" class="download-button">업스케일된 이미지 다운로드</a>
+                <a id="download-link" href="" download="upscaled_image.png" class="download-button">업스케일링 결과 다운로드</a>
                 <button class="reset-button" id="reset-button">다시 시작</button>
             </div>
 

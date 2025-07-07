@@ -1,4 +1,4 @@
-# AI-Upscaling Project
+# AI based Image Super Resolution (Real-HAT-GAN)
 
 ## 🚀 Project Overview
 
@@ -7,6 +7,7 @@ This project provides a web-based AI image upscaling service. It leverages state
 ## ✨ Features
 
 -   **High-Quality Upscaling**: Utilizes the Hybrid Attention Transformer (HAT) model for superior image resolution enhancement.
+-   **Selectable Upscaling Models**: Users can choose between different HAT models (e.g., general-purpose, realistic) directly from the web interface.
 -   **Web Interface**: User-friendly web frontend for easy image upload and upscaling.
 -   **RESTful API**: FastAPI backend provides a clean and efficient API for integration with other applications.
 -   **GPU Acceleration Support**: Configured to leverage NVIDIA GPUs for faster processing.
@@ -17,8 +18,15 @@ This project provides a web-based AI image upscaling service. It leverages state
 -   **Frontend**: HTML, CSS, JavaScript
 -   **AI Models**: Hybrid Attention Transformer (HAT)
 
-### Hybrid Attention Transformer (HAT) Model
-The HAT model is a state-of-the-art image super-resolution model based on the Transformer architecture. It is designed to effectively capture long-range dependencies and fine-grained details in images, leading to superior upscaling quality. This project utilizes a pre-trained HAT model (specifically HAT_SRx4_ImageNet-pretrain.pth) which was trained on the ImageNet dataset for 4x upscaling.
+### Hybrid Attention Transformer (HAT) Models
+The HAT model is a state-of-the-art image super-resolution model based on the Transformer architecture. It is designed to effectively capture long-range dependencies and fine-grained details in images, leading to superior upscaling quality.
+
+This project now supports multiple HAT models, allowing users to select their preferred upscaling style:
+
+-   **HAT_SRx4_ImageNet-pretrain.pth**: A general-purpose HAT model pre-trained on the ImageNet dataset for 4x upscaling. It excels at producing high-fidelity, clean results.
+-   **Real_HAT_GAN_SRx4.pth**: A GAN-based HAT model designed for more realistic and visually pleasing results, often with enhanced textures and details, also for 4x upscaling. This model might introduce more artistic interpretations compared to the ImageNet-pretrain version.
+
+Users can select between these models directly from the web interface.
 
 ## 📚 References
 This project was developed by integrating and adapting components from the following open-source projects and research:
@@ -29,27 +37,48 @@ This project was developed by integrating and adapting components from the follo
 
 ## 📂 Project Structure
 
-The project is organized into a separate frontend and backend.
+The project is organized into a separate frontend and backend, following a clear and maintainable structure.
 
 ```
 AI-Upscaling/
-├── backend/                  # FastAPI backend application
-│   ├── app/                  # Core application logic
-│   │   ├── api/              # API routes
-│   │   ├── services/         # Business logic (upscaling service)
-│   │   ├── config.py         # Application configuration
-│   │   └── main.py           # FastAPI app entry point
-│   ├── models/               # Custom model architectures
-│   ├── model_weights/        # Directory for pre-trained model weights (.pth)
-│   ├── requirements.txt      # Python dependencies
-│   └── run.py                # Script to run the FastAPI application
-├── frontend/                 # Web frontend files
-│   ├── index.html
-│   ├── script.js
-│   └── style.css
-├── .gitignore
-├── README.md                 # This file
-└── venv/                     # Python virtual environment (ignored)
+├── backend/                  # FastAPI backend application for AI image upscaling
+│   ├── __init__.py           # Initializes the backend Python package
+│   ├── .env                  # Environment variables (e.g., for configuration)
+│   ├── .gitignore            # Specifies intentionally untracked files to ignore
+│   ├── requirements.txt      # Python dependencies required for the backend
+│   ├── run.py                # Script to start the FastAPI application using Uvicorn
+│   ├── test_upscale.py       # Unit tests for the upscaling service (if implemented)
+│   ├── __pycache__/          # Python compiled bytecode cache
+│   ├── app/                  # Core application logic for the FastAPI app
+│   │   ├── __init__.py       # Initializes the 'app' Python package
+│   │   ├── config.py         # Application-wide configuration, including model paths and settings
+│   │   ├── main.py           # Main FastAPI application entry point and CORS setup
+│   │   ├── __pycache__/      # Python compiled bytecode cache for 'app'
+│   │   ├── api/              # API route definitions
+│   │   │   ├── routes.py     # Defines API endpoints for image upscaling
+│   │   │   └── __pycache__/  # Python compiled bytecode cache for 'api'
+│   │   └── services/         # Business logic and service implementations
+│   │       ├── realesrgan_utils.py # Utility functions for Real-ESRGAN and model loading
+│   │       ├── upscale_service.py  # Core upscaling logic, loads and manages AI models
+│   │       └── __pycache__/  # Python compiled bytecode cache for 'services'
+│   ├── model_weights/        # Directory to store pre-trained AI model weights (.pth files)
+│   └── models/               # Custom AI model architectures (e.g., HAT, SRVGG)
+│       ├── __init__.py       # Initializes the 'models' Python package
+│       ├── hat_arch.py       # Defines the Hybrid Attention Transformer (HAT) model architecture
+│       ├── srvgg_arch.py     # Defines the SRVGG model architecture
+│       └── __pycache__/      # Python compiled bytecode cache for 'models'
+├── frontend/                 # Web frontend files for user interaction
+│   ├── index.html            # Main HTML page for the web interface
+│   ├── script.js             # JavaScript for dynamic frontend behavior and API calls
+│   └── style.css             # CSS for styling the web interface
+├── venv/                     # Python virtual environment (ignored by .gitignore)
+│   ├── Include/...           # Standard Python virtual environment directories
+│   ├── Lib/...
+│   ├── Scripts/...
+│   └── share/...
+├── .gitignore                # Specifies files and directories to be ignored by Git
+├── README.md                 # Project README file (this file)
+└── .git/                     # Git version control metadata
 ```
 
 ## ⚙️ Setup and Installation
@@ -96,9 +125,10 @@ Follow these steps to get the project up and running on your local machine.
     This should output `GPU Available: True`. If not, please check your NVIDIA driver and CUDA Toolkit installation.
 
 5.  **Download and place model weights:**
-    The project uses the `HAT_SRx4_ImageNet-pretrain.pth` model. Download its pre-trained weights and place them in the `backend/model_weights/` directory.
-    -   **Download Link**: [HAT_SRx4_ImageNet-pretrain.pth](https://github.com/XPixelGroup/HAT/releases/download/v0.1.0/HAT_SRx4_ImageNet-pretrain.pth)
-    -   **Placement**: Save the downloaded file to `backend/model_weights/HAT_SRx4_ImageNet-pretrain.pth`.
+    The project uses multiple HAT models. Download their pre-trained weights and place them in the `backend/model_weights/` directory.
+    -   **HAT_SRx4_ImageNet-pretrain.pth**: [Download Link](https://www.kaggle.com/datasets/djokester/hat-pre-trained-weights?resource=download)
+    -   **Real_HAT_GAN_SRx4.pth**: [Download Link](https://www.kaggle.com/datasets/djokester/hat-pre-trained-weights?resource=download)
+    -   **Placement**: Save the downloaded files to `backend/model_weights/`.
 
 ## 🚀 Usage
 
