@@ -199,7 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const percentage = (x / sliderRect.width) * 100;
 
+        // 결과 이미지 컨테이너를 '슬라이더 위치'만큼 보이게 잘라냄
         upscaledImageContainer.style.width = `${percentage}%`;
+        // 핸들 위치 이동
         sliderHandle.style.left = `${percentage}%`;
     });
 
