@@ -147,17 +147,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const imageBlob = await response.blob();
             const upscaledImageUrl = URL.createObjectURL(imageBlob);
+            // 1. 결과 섹션 먼저 보여주기 (원래는 Promise 아래에 있었음)
+            showSection(resultSection);
+            // 2. 이미지 설정
             upscaledImage.src = upscaledImageUrl;
-
             downloadLink.href = upscaledImageUrl;
             downloadLink.download = `upscaled_${selectedFile.name}`;
-
+            
+            // 3. 이미지 로드 후 슬라이더 높이 재설정
             await new Promise((resolve, reject) => {
-                upscaledImage.onload = resolve;
+                upscaledImage.onload = () => {
+                    // 결과 이미지 기준으로 슬라이더 비율 재설정 (렌더링 안 되던 문제 해결)
+                    const aspectRatio = originalImage.naturalHeight / originalImage.naturalWidth;
+                    imageComparisonSlider.style.height = `${imageComparisonSlider.offsetWidth * aspectRatio}px`;
+
+                    resolve(); // 이미지 로딩 완료
+                };
                 upscaledImage.onerror = reject;
             });
 
-            showSection(resultSection);
+            
 
         } catch (error) {
             console.error('Error:', error);
