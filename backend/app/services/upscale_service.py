@@ -1,8 +1,8 @@
 import torch
 import cv2
 import numpy as np
-from backend.models.hat_arch import HAT
-from backend.app.services.realesrgan_utils import RealESRGANer
+from models.hat_arch import HAT
+from .realesrgan_utils import RealESRGANer
 from PIL import Image
 import io
 

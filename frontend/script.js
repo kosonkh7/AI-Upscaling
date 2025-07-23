@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('model', selectedModel); // FormData에 모델 이름 추가
 
         try {
-            const response = await fetch('http://localhost:8000/upscale/', {
+            const response = await fetch('/upscale/', {
                 method: 'POST',
                 // headers 객체를 명시하지 않아야 브라우저가 자동으로
                 // Content-Type: multipart/form-data 와 boundary를 설정해줍니다.
