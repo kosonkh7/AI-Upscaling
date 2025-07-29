@@ -4,6 +4,8 @@
 
 This project provides a web-based AI image upscaling service. It leverages state-of-the-art deep learning models to enhance the resolution of images, making them clearer and more detailed. The backend is built with FastAPI for a robust API, and the frontend is a simple web interface for easy interaction.
 
+For personal learning only. Not for commercial use.
+
 ## ✨ Features
 
 -   **High-Quality Upscaling**: Utilizes the Hybrid Attention Transformer (HAT) model for superior image resolution enhancement.
@@ -95,7 +97,7 @@ Follow these steps to get the project up and running on your local machine.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/AI-Upscaling.git
+    git clone https://github.com/kosonkh7/AI-Upscaling.git
     cd AI-Upscaling
     ```
 
@@ -132,9 +134,11 @@ Follow these steps to get the project up and running on your local machine.
 
 ## 🚀 Usage
 
-To run the service, you need to start the backend and frontend servers separately in **two different terminals**.
+To run the service, you need to start the backend servers.
 
-### Terminal 1: Run the Backend (API Server)
+Or, you can use with **Docker Image.**
+
+### Run with Backend API Server
 
 Navigate to the project root and run the FastAPI application.
 ```bash
@@ -142,19 +146,14 @@ python backend/run.py
 ```
 The backend API will start on `http://127.0.0.1:8000`. You will see logs from the Uvicorn server in this terminal.
 
-### Terminal 2: Run the Frontend (Web Interface)
+### Run with Docker Container
 
 In a new terminal, navigate to the `frontend` directory and start a simple Python web server.
-```bash
-cd frontend
-python -m http.server 3000
+```docker
+docker pull kosonkh7/aisr-upscaler-gpu:v0.0.0
+docker run --gpus all -d -p 8000:8000 kosonkh7/aisr-upscaler-gpu:v0.0.0
 ```
-This will serve the `index.html` file on `http://127.0.0.1:3000`.
-
-### Accessing the Application
-
-Once both servers are running, open your web browser and go to:
-> **http://127.0.0.1:3000**
+This will also start on `http://127.0.0.1:8000`.
 
 You can now upload an image to be upscaled.
 
@@ -165,6 +164,7 @@ You can now upload an image to be upscaled.
     -   **Solution**: This project's `requirements.txt` file resolves this by installing these libraries directly from their official GitHub repositories, which contain the latest compatibility fixes. If you encounter this error, ensure you have correctly installed the dependencies using `pip install -r backend/requirements.txt`.
 
 ## 💡 Future Improvements
+-   **Memory Efficiency**: Address CUDA out-of-memory (OOM) issues by optimizing GPU memory usage and implementing smarter batch/image size handling.
 
 -   **Model Diversity**: Integrate specialized models for different image types (e.g., faces, illustrations) to improve quality across various domains.
 -   **Performance Optimization**: Explore ONNX/TensorRT conversion for further speedup.
