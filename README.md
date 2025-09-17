@@ -1,4 +1,4 @@
-# AI based Image Super Resolution (Real-HAT-GAN)
+# AI based Image Super Resolution (with Real_HAT_GAN_SRx4)
 
 ## 🚀 Project Overview
 
@@ -130,7 +130,7 @@ Follow these steps to get the project up and running on your local machine.
     The project uses multiple HAT models. Download their pre-trained weights and place them in the `backend/model_weights/` directory.
     -   **HAT_SRx4_ImageNet-pretrain.pth**: [Download Link](https://www.kaggle.com/datasets/djokester/hat-pre-trained-weights?resource=download)
     -   **Real_HAT_GAN_SRx4.pth**: [Download Link](https://www.kaggle.com/datasets/djokester/hat-pre-trained-weights?resource=download)
-    -   **Placement**: Save the downloaded files to `backend/model_weights/`.
+    -   **Placement(Important!)**: Save the downloaded files to `backend/model_weights/`.
 
 ## 🚀 Usage
 
@@ -157,14 +157,8 @@ This will also start on `http://127.0.0.1:8000`.
 
 You can now upload an image to be upscaled.
 
-## 🔧 Troubleshooting
-
--   **`ModuleNotFoundError: No module named 'torchvision.transforms.functional_tensor'`**
-    -   **Cause**: This error occurs because the standard versions of `basicsr` or `gfpgan` from PyPI are not compatible with recent versions of `torchvision`. The `functional_tensor` module was refactored in newer `torchvision` releases.
-    -   **Solution**: This project's `requirements.txt` file resolves this by installing these libraries directly from their official GitHub repositories, which contain the latest compatibility fixes. If you encounter this error, ensure you have correctly installed the dependencies using `pip install -r backend/requirements.txt`.
-
 ## 💡 Future Improvements
--   **Memory Efficiency**: Address CUDA out-of-memory (OOM) issues by optimizing GPU memory usage and implementing smarter batch/image size handling.
+-   **Memory Efficiency**: Address CUDA out-of-memory (OOM) issues by optimizing GPU memory usage and implementing smarter batch/image size handling. (requires more than 20GB of VRAM basically.)
 
 -   **Model Diversity**: Integrate specialized models for different image types (e.g., faces, illustrations) to improve quality across various domains.
 -   **Performance Optimization**: Explore ONNX/TensorRT conversion for further speedup.
@@ -173,3 +167,18 @@ You can now upload an image to be upscaled.
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
+
+
+
+
+
+<details>
+<summary>tmp</summary>
+
+## 🔧 Troubleshooting
+
+-   **`ModuleNotFoundError: No module named 'torchvision.transforms.functional_tensor'`**
+    -   **Cause**: This error occurs because the standard versions of `basicsr` or `gfpgan` from PyPI are not compatible with recent versions of `torchvision`. The `functional_tensor` module was refactored in newer `torchvision` releases.
+    -   **Solution**: This project's `requirements.txt` file resolves this by installing these libraries directly from their official GitHub repositories, which contain the latest compatibility fixes. If you encounter this error, ensure you have correctly installed the dependencies using `pip install -r backend/requirements.txt`.
+
+</details>
